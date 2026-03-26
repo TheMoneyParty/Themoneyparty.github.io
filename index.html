@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Money Party | Live Lobby</title>
+    <style>
+        body { background-color: #0b0e11; color: #ffffff; font-family: 'Inter', sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        header { padding: 10px 20px; border-bottom: 1px solid #2b2f36; display: flex; justify-content: space-between; align-items: center; }
+        .main-container { display: flex; flex: 1; flex-direction: row; }
+        
+        /* The Stream Window */
+        .stream-box { flex: 2; background: #000; display: flex; justify-content: center; align-items: center; border-right: 1px solid #2b2f36; }
+        
+        /* The Jupiter Wallet Window */
+        .wallet-box { flex: 1; min-width: 380px; display: flex; flex-direction: column; background: #161a1e; padding: 10px; }
+        
+        iframe { width: 100%; height: 100%; border: none; }
+        #integrated-terminal { width: 100%; height: 100%; border-radius: 12px; }
+
+        @media (max-width: 800px) { .main-container { flex-direction: column; } .stream-box { flex: 1; } .wallet-box { flex: 1.5; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="font-weight: bold; font-size: 1.2rem; color: #cbb602;">THE MONEY PARTY</div>
+    <div style="font-size: 0.9rem; color: #848e9c;">Live Solana Game & Swap</div>
+</header>
+
+<div class="main-container">
+    <div class="stream-box">
+        <iframe src="https://player.twitch.tv/?channel=YOUR_CHANNEL&parent=themoneyparty.github.io" allowfullscreen="true"></iframe>
+    </div>
+
+    <div class="wallet-box">
+        <div id="integrated-terminal"></div>
+    </div>
+</div>
+
+<script src="https://terminal.jup.ag/main-v2.js"></script>
+<script>
+  window.Jupiter.init({
+    displayMode: "integrated",
+    integratedTargetId: "integrated-terminal",
+    endpoint: "https://api.mainnet-beta.solana.com",
+    // PASTE YOUR PHANTOM WALLET ADDRESS HERE
+    referralKey: "YOUR_SOL_ADDRESS_HERE",
+    feeBps: 100, // 1% Referral Fee for you
+    containerStyles: { zIndex: 100 },
+  });
+</script>
+
+</body>
+</html>
