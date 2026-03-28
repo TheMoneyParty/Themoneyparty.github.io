@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Money Party | Lobby</title>
+    <link rel="preconnect" href="https://terminal.jup.ag">
+    <link rel="preconnect" href="https://player.twitch.tv">
+    
     <style>
         /* Base Desktop Styles */
         body { background-color: #0b0e11; color: #fff; font-family: sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
         header { padding: 12px 20px; background: #161a1e; border-bottom: 1px solid #2b2f36; display: flex; justify-content: space-between; align-items: center; z-index: 10; flex-shrink: 0; }
         
+        /* NEW: Live Indicator Styles */
+        .live-status { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: bold; color: #ff4b4b; text-transform: uppercase; }
+        .dot { height: 8px; width: 8px; background-color: #ff4b4b; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ff4b4b; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+
         .main-layout { display: flex; flex: 1; height: calc(100vh - 60px); overflow: hidden; }
         
         .content-left { flex: 2; display: flex; flex-direction: column; border-right: 1px solid #2b2f36; background: #000; overflow: hidden; }
@@ -17,7 +25,6 @@
         
         .content-right { flex: 1; min-width: 380px; background: #161a1e; display: flex; flex-direction: column; overflow-y: auto; }
         
-        /* Onboarding Room */
         .onboarding-room { padding: 20px; border-bottom: 1px solid #2b2f36; background: #1c2127; }
         .jupiter-banner { background: linear-gradient(90deg, #c7f284 0%, #00bedb 100%); color: #000; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; text-decoration: none; display: block; font-size: 0.9rem; }
         .protocol-step { display: flex; align-items: flex-start; margin-bottom: 12px; font-size: 0.85rem; color: #848e9c; }
@@ -42,7 +49,10 @@
 <body>
 
 <header>
-    <div style="font-weight: bold; color: #f3d000; letter-spacing: 1px; font-size: 0.9rem;">MONEY PARTY LOBBY</div>
+    <div style="display: flex; flex-direction: column;">
+        <div style="font-weight: bold; color: #f3d000; letter-spacing: 1px; font-size: 0.9rem;">MONEY PARTY LOBBY</div>
+        <div class="live-status"><span class="dot"></span> Live Feed Active</div>
+    </div>
     <a href="https://x.com/The_money_party" target="_blank" style="color: #1da1f2; text-decoration: none; font-size: 0.7rem; border: 1px solid #1da1f2; padding: 4px 10px; border-radius: 15px;">X @The_money_party</a>
 </header>
 
@@ -60,29 +70,39 @@
 
     <div class="content-right">
         <div class="onboarding-room">
-            <a href="https://jup.ag/" target="_blank" class="jupiter-banner">🚀 SIGN UP / SWAP ON JUPITER</a>
+            <a href="https://jup.ag/" target="_blank" class="jupiter-banner">🚀 SIGN UP / SWAP ON JUPITER (OFFICIAL)</a>
+            
             <h3 style="color: #f3d000; margin-top: 0; font-size: 1rem;">ENTRY PROTOCOL</h3>
             <div class="protocol-step">
                 <span class="step-num">01</span>
-                <div><strong>WALLET:</strong> Connect Phantom/Solflare in the terminal.</div>
+                <div><strong>WALLET:</strong> Connect Phantom or Solflare in the terminal below.</div>
             </div>
             <div class="protocol-step">
                 <span class="step-num">02</span>
-                <div><strong>SWAP:</strong> Get your tokens through our Jupiter link.</div>
+                <div><strong>SWAP:</strong> Get your tokens through our partner terminal to support the party.</div>
+            </div>
+            <div class="protocol-step">
+                <span class="step-num">03</span>
+                <div><strong>PLAY:</strong> Switch back to the left tab and enter the game.</div>
             </div>
         </div>
         <div id="integrated-terminal"></div>
     </div>
 </div>
 
-<script src="https://terminal.jup.ag/main-v2.js"></script>
+<script src="https://terminal.jup.ag/main-v2.js" defer></script>
 <script>
-  window.Jupiter.init({
-    displayMode: "integrated",
-    integratedTargetId: "integrated-terminal",
-    endpoint: "https://solana-mainnet.g.allmystatics.com",
-    referralKey: "JAf5xmGS94VJE2MFm7i3Kcq8JEmw4jCyY7DG4Hz1iMMk",
-    feeBps: 100
+  // Wait for the script to load before initializing
+  window.addEventListener('load', () => {
+    if (window.Jupiter) {
+      window.Jupiter.init({
+        displayMode: "integrated",
+        integratedTargetId: "integrated-terminal",
+        endpoint: "https://solana-mainnet.g.allmystatics.com",
+        referralKey: "JAf5xmGS94VJE2MFm7i3Kcq8JEmw4jCyY7DG4Hz1iMMk",
+        feeBps: 100
+      });
+    }
   });
 </script>
 </body>
