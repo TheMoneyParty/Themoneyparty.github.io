@@ -5,86 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Money Party | Lobby</title>
     <link rel="preconnect" href="https://terminal.jup.ag">
-    <link rel="preconnect" href="https://player.twitch.tv">
-    
     <style>
-        /* Base Desktop Styles */
-        body { background-color: #0b0e11; color: #fff; font-family: sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
-        header { padding: 12px 20px; background: #161a1e; border-bottom: 1px solid #2b2f36; display: flex; justify-content: space-between; align-items: center; z-index: 10; flex-shrink: 0; }
+        /* CSS Variables for quick branding updates */
+        :root { --party-yellow: #f3d000; --bg-dark: #0b0e11; --border-gray: #2b2f36; }
+
+        body { background-color: var(--bg-dark); color: #fff; font-family: 'Segoe UI', Roboto, sans-serif; margin: 0; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+        header { padding: 12px 20px; background: #161a1e; border-bottom: 1px solid var(--border-gray); display: flex; justify-content: space-between; align-items: center; z-index: 10; }
         
-        /* NEW: Live Indicator Styles */
-        .live-status { display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: bold; color: #ff4b4b; text-transform: uppercase; }
-        .dot { height: 8px; width: 8px; background-color: #ff4b4b; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #ff4b4b; animation: pulse 1.5s infinite; }
+        .live-indicator { display: flex; align-items: center; gap: 8px; font-size: 0.7rem; color: #ff4b4b; text-transform: uppercase; letter-spacing: 1px; }
+        .dot { height: 8px; width: 8px; background: #ff4b4b; border-radius: 50%; box-shadow: 0 0 8px #ff4b4b; animation: pulse 1.5s infinite; }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
 
-        .main-layout { display: flex; flex: 1; height: calc(100vh - 60px); overflow: hidden; }
+        .main-layout { display: flex; flex: 1; height: calc(100vh - 60px); }
         
-        .content-left { flex: 2; display: flex; flex-direction: column; border-right: 1px solid #2b2f36; background: #000; overflow: hidden; }
-        .game-launcher { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 20px; background: radial-gradient(circle, #1c1f26 0%, #0b0e11 100%); }
-        .stream-box { flex: 1.5; border-top: 1px solid #2b2f36; background: #000; position: relative; }
+        /* Layout Sections */
+        .content-left { flex: 2; display: flex; flex-direction: column; border-right: 1px solid var(--border-gray); background: #000; }
+        .game-launcher { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; background: radial-gradient(circle, #1c1f26 0%, #0b0e11 100%); }
+        .stream-box { flex: 1.5; border-top: 1px solid var(--border-gray); background: #000; }
         
-        .content-right { flex: 1; min-width: 380px; background: #161a1e; display: flex; flex-direction: column; overflow-y: auto; }
+        .content-right { flex: 1; min-width: 380px; background: #161a1e; display: flex; flex-direction: column; overflow-y: auto; border-left: 1px solid var(--border-gray); }
         
-        .onboarding-room { padding: 20px; border-bottom: 1px solid #2b2f36; background: #1c2127; }
-        .jupiter-banner { background: linear-gradient(90deg, #c7f284 0%, #00bedb 100%); color: #000; padding: 15px; border-radius: 8px; margin-bottom: 20px; text-align: center; font-weight: bold; cursor: pointer; text-decoration: none; display: block; font-size: 0.9rem; }
-        .protocol-step { display: flex; align-items: flex-start; margin-bottom: 12px; font-size: 0.85rem; color: #848e9c; }
-        .step-num { color: #f3d000; font-weight: bold; margin-right: 10px; border: 1px solid #f3d000; padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        /* UI Components */
+        .onboarding { padding: 20px; border-bottom: 1px solid var(--border-gray); }
+        .jup-button { background: linear-gradient(90deg, #c7f284 0%, #00bedb 100%); color: #000; padding: 14px; border-radius: 6px; text-align: center; font-weight: bold; text-decoration: none; display: block; margin-bottom: 15px; font-size: 0.85rem; }
+        
+        .btn-launch { background: var(--party-yellow); color: #000; padding: 16px 30px; font-size: 1.2rem; font-weight: bold; text-decoration: none; border-radius: 6px; transition: 0.2s; }
+        .btn-launch:hover { background: #fff; transform: translateY(-2px); }
 
-        .btn-launch { background: #f3d000; color: #000; padding: 18px 35px; font-size: 1.2rem; font-weight: bold; text-decoration: none; border-radius: 8px; box-shadow: 0 0 15px rgba(243, 208, 0, 0.3); transition: 0.3s; }
-        iframe { width: 100%; height: 100%; border: none; }
-        #integrated-terminal { width: 100%; min-height: 550px; flex: 1; }
+        #integrated-terminal { width: 100%; min-height: 550px; }
 
-        /* RESPONSIVE MOBILE OVERRIDES */
+        /* Mobile Optimization */
         @media (max-width: 850px) {
             body { overflow-y: auto; height: auto; }
-            .main-layout { flex-direction: column; height: auto; overflow: visible; }
-            .content-left { border-right: none; border-bottom: 1px solid #2b2f36; height: auto; flex: none; }
-            .stream-box { height: 300px; flex: none; }
-            .content-right { min-width: 100%; height: auto; flex: none; }
+            .main-layout { flex-direction: column; height: auto; }
+            .content-left, .content-right { min-width: 100%; height: auto; flex: none; border: none; }
+            .stream-box { height: 250px; }
             #integrated-terminal { min-height: 600px; }
-            .game-launcher { padding: 40px 20px; }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <div style="display: flex; flex-direction: column;">
-        <div style="font-weight: bold; color: #f3d000; letter-spacing: 1px; font-size: 0.9rem;">MONEY PARTY LOBBY</div>
-        <div class="live-status"><span class="dot"></span> Live Feed Active</div>
+    <div>
+        <div style="font-weight: bold; color: var(--party-yellow); font-size: 0.9rem;">THE MONEY PARTY</div>
+        <div class="live-indicator"><span class="dot"></span> System Live</div>
     </div>
-    <a href="https://x.com/The_money_party" target="_blank" style="color: #1da1f2; text-decoration: none; font-size: 0.7rem; border: 1px solid #1da1f2; padding: 4px 10px; border-radius: 15px;">X @The_money_party</a>
+    <a href="https://x.com/The_money_party" target="_blank" style="color: #1da1f2; text-decoration: none; font-size: 0.7rem; border: 1px solid #1da1f2; padding: 4px 10px; border-radius: 15px;">Follow Updates</a>
 </header>
 
 <div class="main-layout">
     <div class="content-left">
         <div class="game-launcher">
-            <h2 style="margin: 0 0 10px 0; color: #f3d000;">DEGEN COINCRASH</h2>
-            <p style="color: #848e9c; margin-bottom: 25px; font-size: 0.8rem;">Launch app, then swap below.</p>
-            <a href="https://app.degencoinflip.com/crash" target="_blank" class="btn-launch">OPEN GAME APP</a>
+            <h2 style="color: var(--party-yellow); margin-bottom: 5px;">COINCRASH PROTOCOL</h2>
+            <p style="color: #848e9c; font-size: 0.8rem; margin-bottom: 20px;">1.15x Compounding Strategy Active</p>
+            <a href="https://app.degencoinflip.com/crash" target="_blank" class="btn-launch">LAUNCH GAME APP</a>
         </div>
         <div class="stream-box">
-            <iframe src="https://player.twitch.tv/?channel=themoneyparty&parent=themoneyparty.github.io&autoplay=true&muted=false" allowfullscreen></iframe>
+            <iframe 
+                src="https://player.twitch.tv/?channel=themoneyparty&parent=themoneyparty.github.io&autoplay=true&muted=false" 
+                height="100%" width="100%" allowfullscreen>
+            </iframe>
         </div>
     </div>
 
     <div class="content-right">
-        <div class="onboarding-room">
-            <a href="https://jup.ag/" target="_blank" class="jupiter-banner">🚀 SIGN UP / SWAP ON JUPITER (OFFICIAL)</a>
-            
-            <h3 style="color: #f3d000; margin-top: 0; font-size: 1rem;">ENTRY PROTOCOL</h3>
-            <div class="protocol-step">
-                <span class="step-num">01</span>
-                <div><strong>WALLET:</strong> Connect Phantom or Solflare in the terminal below.</div>
-            </div>
-            <div class="protocol-step">
-                <span class="step-num">02</span>
-                <div><strong>SWAP:</strong> Get your tokens through our partner terminal to support the party.</div>
-            </div>
-            <div class="protocol-step">
-                <span class="step-num">03</span>
-                <div><strong>PLAY:</strong> Switch back to the left tab and enter the game.</div>
-            </div>
+        <div class="onboarding">
+            <a href="https://jup.ag/" target="_blank" class="jup-button">GET JUPITER REFERRAL SIGN-UP</a>
+            <h4 style="margin: 0 0 10px 0; font-size: 0.9rem; color: var(--party-yellow);">HOW TO ENTER</h4>
+            <p style="font-size: 0.75rem; color: #848e9c; line-height: 1.4;">
+                1. Connect wallet in the terminal below.<br>
+                2. Swap for SOL/USDC using our link.<br>
+                3. Open game app and execute 1.15x strategy.
+            </p>
         </div>
         <div id="integrated-terminal"></div>
     </div>
@@ -92,18 +85,17 @@
 
 <script src="https://terminal.jup.ag/main-v2.js" defer></script>
 <script>
-  // Wait for the script to load before initializing
-  window.addEventListener('load', () => {
-    if (window.Jupiter) {
-      window.Jupiter.init({
-        displayMode: "integrated",
-        integratedTargetId: "integrated-terminal",
-        endpoint: "https://solana-mainnet.g.allmystatics.com",
-        referralKey: "JAf5xmGS94VJE2MFm7i3Kcq8JEmw4jCyY7DG4Hz1iMMk",
-        feeBps: 100
-      });
-    }
-  });
+    window.addEventListener('load', () => {
+        if (window.Jupiter) {
+            window.Jupiter.init({
+                displayMode: "integrated",
+                integratedTargetId: "integrated-terminal",
+                endpoint: "https://solana-mainnet.g.allmystatics.com",
+                referralKey: "JAf5xmGS94VJE2MFm7i3Kcq8JEmw4jCyY7DG4Hz1iMMk",
+                feeBps: 100
+            });
+        }
+    });
 </script>
 </body>
 </html>
